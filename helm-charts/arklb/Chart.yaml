@@ -1,0 +1,18 @@
+annotations:
+  artifacthub.io/license: GPL-3.0
+  artifacthub.io/links: |
+    - name: home
+      url: https://github.com/ark-7/
+  artifacthub.io/maintainers: |
+    - name: Aadhitya A
+      email: aadhitya864@gmail.com
+apiVersion: v2
+appVersion: 0.1.6
+description: A Helm chart for arkLB - eBPF/XDP based project
+icon: https://avatars.githubusercontent.com/u/128674337?s=200&v=4
+maintainers:
+- email: aadhitya864@gmail.com
+  name: Aadhitya A
+name: arklb
+type: application
+version: 0.1.3

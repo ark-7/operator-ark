@@ -1,0 +1,27 @@
+# permissions for end users to view arklbs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: arklb-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: operator-ark
+    app.kubernetes.io/part-of: operator-ark
+    app.kubernetes.io/managed-by: kustomize
+  name: arklb-viewer-role
+rules:
+- apiGroups:
+  - charts.hub.docker.com
+  resources:
+  - arklbs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - charts.hub.docker.com
+  resources:
+  - arklbs/status
+  verbs:
+  - get

@@ -9,4 +9,12 @@ plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: operator-ark
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  domain: hub.docker.com
+  group: charts
+  kind: Arklb
+  version: v1alpha1
 version: "3"

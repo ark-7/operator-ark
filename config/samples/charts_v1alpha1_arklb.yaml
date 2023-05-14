@@ -1,0 +1,60 @@
+apiVersion: charts.hub.docker.com/v1alpha1
+kind: Arklb
+metadata:
+  name: arklb-sample
+spec:
+  # Default values copied from <project_dir>/helm-charts/arklb/values.yaml
+  replicaCount: 2
+  affinity: {}
+  autoscaling:
+    enabled: false
+    maxReplicas: 10
+    minReplicas: 1
+  image1:
+    pullPolicy: IfNotPresent
+    repository: aerox86/arklb
+    tag: latest
+    tty: true
+  image2:
+    pullPolicy: IfNotPresent
+    repository: aerox86/arklb-rust
+    tag: latest
+    tty: true
+  image3:
+    pullPolicy: IfNotPresent
+    repository: nginxdemos/hello
+    tag: plain-text
+    tty: true
+  image3r:
+    pullPolicy: IfNotPresent
+    repository: nginxdemos/hello
+    tag: plain-text
+    tty: true
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    className: ""
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+    tls: []
+  nodeSelector: {}
+  podAnnotations: {}
+  podSecurityContext: {}
+  resources: {}
+  restartPolicy: Always
+  securityContext:
+    privileged: true
+  service:
+    port: 80
+    type: LoadBalancer
+  serviceAccount:
+    annotations: {}
+    create: true
+    name: arklb
+  tolerations: []
+  
+  

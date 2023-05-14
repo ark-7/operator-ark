@@ -28,4 +28,56 @@ rules:
   verbs:
   - create
 
+##
+## Rules for charts.hub.docker.com/v1alpha1, Kind: Arklb
+##
+- apiGroups:
+  - charts.hub.docker.com
+  resources:
+  - arklbs
+  - arklbs/status
+  - arklbs/finalizers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - services/finalizers
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+
 #+kubebuilder:scaffold:rules
