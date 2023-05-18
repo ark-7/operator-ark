@@ -1,0 +1,44 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+metadata:
+  annotations:
+    alm-examples: '[]'
+    capabilities: Basic Install
+  name: operator-ark.v0.0.1
+  namespace: placeholder
+spec:
+  apiservicedefinitions: {}
+  customresourcedefinitions: {}
+  description: Kubernetes operator for project ARK
+  displayName: operator-ark
+  icon:
+  - base64data: ""
+    mediatype: ""
+  install:
+    spec:
+      deployments: null
+    strategy: ""
+  installModes:
+  - supported: false
+    type: OwnNamespace
+  - supported: false
+    type: SingleNamespace
+  - supported: false
+    type: MultiNamespace
+  - supported: true
+    type: AllNamespaces
+  keywords:
+  - ebpf
+  - k8s
+  - experimental
+  - xdp
+  links:
+  - name: Ark-7
+    url: https://github.com/ark-7
+  maintainers:
+  - email: aadhitya864@gmail.com
+    name: Aadhitya A
+  maturity: alpha
+  provider:
+    name: ark-7
+  version: 0.0.1
