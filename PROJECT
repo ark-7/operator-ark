@@ -2,19 +2,22 @@
 # This file is used to track the info used to scaffold your project
 # and allow the plugins properly work.
 # More info: https://book.kubebuilder.io/reference/project-config.html
-domain: hub.docker.com
+domain: ark-7.io
 layout:
-- helm.sdk.operatorframework.io/v1
+- go.kubebuilder.io/v3
 plugins:
   manifests.sdk.operatorframework.io/v2: {}
   scorecard.sdk.operatorframework.io/v2: {}
 projectName: operator-ark
+repo: github.com/ark-7/operator-ark
 resources:
 - api:
     crdVersion: v1
     namespaced: true
-  domain: hub.docker.com
-  group: charts
-  kind: Arklb
+  controller: true
+  domain: ark-7.io
+  group: cache
+  kind: Ark
+  path: github.com/ark-7/operator-ark/api/v1alpha1
   version: v1alpha1
 version: "3"
