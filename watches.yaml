@@ -1,5 +1,5 @@
 # Use the 'create api' subcommand to add watches to this file.
-- group: charts.ark7.io
+- group: charts.hub.docker.com
   version: v1alpha1
   kind: Arklb
   chart: helm-charts/arklb

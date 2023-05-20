@@ -12,7 +12,7 @@ metadata:
   name: arklb-editor-role
 rules:
 - apiGroups:
-  - charts.ark7.io
+  - charts.hub.docker.com
   resources:
   - arklbs
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - charts.ark7.io
+  - charts.hub.docker.com
   resources:
   - arklbs/status
   verbs:

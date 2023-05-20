@@ -1,4 +1,4 @@
-apiVersion: charts.ark7.io/v1alpha1
+apiVersion: charts.hub.docker.com/v1alpha1
 kind: Arklb
 metadata:
   name: arklb-sample
@@ -10,25 +10,10 @@ spec:
     enabled: false
     maxReplicas: 10
     minReplicas: 1
-  image1:
+  image:
     pullPolicy: IfNotPresent
     repository: aerox86/arklb
     tag: latest
-    tty: true
-  image2:
-    pullPolicy: IfNotPresent
-    repository: aerox86/arklb-rust
-    tag: latest
-    tty: true
-  image3:
-    pullPolicy: IfNotPresent
-    repository: nginxdemos/hello
-    tag: plain-text
-    tty: true
-  image3r:
-    pullPolicy: IfNotPresent
-    repository: nginxdemos/hello
-    tag: plain-text
     tty: true
   imagePullSecrets: []
   ingress:
@@ -47,14 +32,12 @@ spec:
   resources: {}
   restartPolicy: Always
   securityContext:
-    privileged: true
+    privileged: false
   service:
-    port: 80
-    type: LoadBalancer
+    port: 8001
+    type: ClusterIP
   serviceAccount:
     annotations: {}
     create: true
     name: arklb
   tolerations: []
-  
-  
