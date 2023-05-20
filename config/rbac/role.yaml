@@ -29,10 +29,10 @@ rules:
   - create
 
 ##
-## Rules for charts.hub.docker.com/v1alpha1, Kind: Arklb
+## Rules for charts.ark7.io/v1alpha1, Kind: Arklb
 ##
 - apiGroups:
-  - charts.hub.docker.com
+  - charts.ark7.io
   resources:
   - arklbs
   - arklbs/status

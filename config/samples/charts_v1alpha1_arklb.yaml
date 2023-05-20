@@ -1,4 +1,4 @@
-apiVersion: charts.hub.docker.com/v1alpha1
+apiVersion: charts.ark7.io/v1alpha1
 kind: Arklb
 metadata:
   name: arklb-sample
