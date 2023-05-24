@@ -32,10 +32,10 @@ spec:
   resources: {}
   restartPolicy: Always
   securityContext:
-    privileged: false
+    privileged: true
   service:
-    port: 8001
-    type: ClusterIP
+    port: 8081
+    type: NodePort
   serviceAccount:
     annotations: {}
     create: true
