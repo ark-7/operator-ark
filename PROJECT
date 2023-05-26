@@ -2,7 +2,7 @@
 # This file is used to track the info used to scaffold your project
 # and allow the plugins properly work.
 # More info: https://book.kubebuilder.io/reference/project-config.html
-domain: ark7.github.io
+domain: ark.com
 layout:
 - helm.sdk.operatorframework.io/v1
 plugins:
@@ -13,8 +13,8 @@ resources:
 - api:
     crdVersion: v1
     namespaced: true
-  domain: ark7.github.io
-  group: dev
+  domain: ark.com
+  group: test
   kind: Ark
   version: v1alpha1
 version: "3"

@@ -1,20 +1,20 @@
-apiVersion: dev.ark7.github.io/v1alpha1
+apiVersion: test.ark.com/v1alpha1
 kind: Ark
 metadata:
   name: ark-sample
-  namespace: default
 spec:
-  # Default values copied from <project_dir>/helm-charts/arklb/values.yaml
-  replicaCount: 1
+  # Default values copied from <project_dir>/helm-charts/ark/values.yaml
   affinity: {}
   autoscaling:
     enabled: false
-    maxReplicas: 10
+    maxReplicas: 100
     minReplicas: 1
+    targetCPUUtilizationPercentage: 80
+  fullnameOverride: ""
   image:
     pullPolicy: IfNotPresent
     repository: aerox86/arklb
-    tty: true
+    tag: ""
   imagePullSecrets: []
   ingress:
     annotations: {}
@@ -26,19 +26,21 @@ spec:
       - path: /
         pathType: ImplementationSpecific
     tls: []
+  nameOverride: ""
   nodeSelector: {}
   podAnnotations: {}
   podSecurityContext: {}
+  replicaCount: 1
   resources: {}
-  restartPolicy: Always
-  securityContext:
+  securityContext: 
     privileged: true
   service:
-    port: 8080
+    port: 80
     type: ClusterIP
   serviceAccount:
     annotations: {}
-    create: false
-    name: ark
+    create: true
+    name: ""
   tolerations: []
+  
   

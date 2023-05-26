@@ -1,6 +1,6 @@
 # Use the 'create api' subcommand to add watches to this file.
-- group: dev.ark7.github.io
+- group: test.ark.com
   version: v1alpha1
   kind: Ark
-  chart: helm-charts/arklb
+  chart: helm-charts/ark
 #+kubebuilder:scaffold:watch

@@ -12,7 +12,7 @@ metadata:
   name: ark-editor-role
 rules:
 - apiGroups:
-  - dev.ark7.github.io
+  - test.ark.com
   resources:
   - arks
   verbs:
@@ -24,7 +24,7 @@ rules:
   - update
   - watch
 - apiGroups:
-  - dev.ark7.github.io
+  - test.ark.com
   resources:
   - arks/status
   verbs:
