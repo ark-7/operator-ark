@@ -35,6 +35,9 @@ spec:
           spec:
             description: ArklbSpec defines the desired state of Arklb
             properties:
+              containerPort:
+                format: int32
+                type: integer
               size:
                 description: 'Size defines the number of Arklb instances The following
                   markers will use OpenAPI v3 schema to validate the value More info:

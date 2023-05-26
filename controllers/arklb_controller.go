@@ -381,6 +381,7 @@ func (r *ArklbReconciler) deploymentForArklb(
 									"ALL",
 								},
 							},
+							RunAsUser: &[]int64{1000}[0],
 						},
 					}},
 				},
