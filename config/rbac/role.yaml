@@ -18,32 +18,6 @@ rules:
   - update
   - watch
 - apiGroups:
-  - cache.example.com
-  resources:
-  - arks
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - cache.example.com
-  resources:
-  - arks/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - cache.example.com
-  resources:
-  - arks/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
   - ""
   resources:
   - events
@@ -58,3 +32,29 @@ rules:
   - get
   - list
   - watch
+- apiGroups:
+  - dev.ark7.com
+  resources:
+  - arklbs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - dev.ark7.com
+  resources:
+  - arklbs/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - dev.ark7.com
+  resources:
+  - arklbs/status
+  verbs:
+  - get
+  - patch
+  - update

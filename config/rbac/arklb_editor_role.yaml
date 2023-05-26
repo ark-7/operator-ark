@@ -1,27 +1,31 @@
-# permissions for end users to view arks.
+# permissions for end users to edit arklbs.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: clusterrole
-    app.kubernetes.io/instance: ark-viewer-role
+    app.kubernetes.io/instance: arklb-editor-role
     app.kubernetes.io/component: rbac
     app.kubernetes.io/created-by: operator-ark
     app.kubernetes.io/part-of: operator-ark
     app.kubernetes.io/managed-by: kustomize
-  name: ark-viewer-role
+  name: arklb-editor-role
 rules:
 - apiGroups:
-  - cache.ark-7.io
+  - dev.ark7.com
   resources:
-  - arks
+  - arklbs
   verbs:
+  - create
+  - delete
   - get
   - list
+  - patch
+  - update
   - watch
 - apiGroups:
-  - cache.ark-7.io
+  - dev.ark7.com
   resources:
-  - arks/status
+  - arklbs/status
   verbs:
   - get

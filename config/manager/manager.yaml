@@ -72,6 +72,9 @@ spec:
         - --leader-elect
         image: controller:latest
         name: manager
+        env:
+        - name: ARKLB_IMAGE
+          value: aerox86/arklb:v0.1.10
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

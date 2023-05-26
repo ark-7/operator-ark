@@ -5,4 +5,4 @@ kind: Kustomization
 images:
 - name: controller
   newName: aerox86/operator-ark
-  newTag: v0.0.2
+  newTag: v0.0.5

@@ -5,20 +5,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
-  name: arks.cache.ark-7.io
+  name: arklbs.dev.ark7.com
 spec:
-  group: cache.ark-7.io
+  group: dev.ark7.com
   names:
-    kind: Ark
-    listKind: ArkList
-    plural: arks
-    singular: ark
+    kind: Arklb
+    listKind: ArklbList
+    plural: arklbs
+    singular: arklb
   scope: Namespaced
   versions:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Ark is the Schema for the arks API
+        description: Arklb is the Schema for the arklbs API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -33,26 +33,21 @@ spec:
           metadata:
             type: object
           spec:
-            description: ArkSpec defines the desired state of Ark
+            description: ArklbSpec defines the desired state of Arklb
             properties:
-              containerPort:
-                format: int32
-                type: integer
-              foo:
-                description: Foo is an example field of Ark. Edit ark_types.go to
-                  remove/update
-                type: string
               size:
+                description: 'Size defines the number of Arklb instances The following
+                  markers will use OpenAPI v3 schema to validate the value More info:
+                  https://book.kubebuilder.io/reference/markers/crd-validation.html'
                 format: int32
+                maximum: 3
+                minimum: 1
                 type: integer
             type: object
           status:
-            description: ArkStatus defines the observed state of Ark
+            description: ArklbStatus defines the observed state of Arklb
             properties:
               conditions:
-                description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
-                  of cluster Important: Run "make" to regenerate code after modifying
-                  this file'
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct

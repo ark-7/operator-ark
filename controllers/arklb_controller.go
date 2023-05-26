@@ -36,21 +36,21 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/log"
 
-	cachev1alpha1 "github.com/ark-7/operator-ark/api/v1alpha1"
+	devv1alpha1 "github.com/ark-7/operator-ark/api/v1alpha1"
 )
 
-const arkFinalizer = "cache.ark-7.io/finalizer"
+const arklbFinalizer = "dev.ark7.com/finalizer"
 
 // Definitions to manage status conditions
 const (
-	// typeAvailableArk represents the status of the Deployment reconciliation
-	typeAvailableArk = "Available"
-	// typeDegradedArk represents the status used when the custom resource is deleted and the finalizer operations are must to occur.
-	typeDegradedArk = "Degraded"
+	// typeAvailableArklb represents the status of the Deployment reconciliation
+	typeAvailableArklb = "Available"
+	// typeDegradedArklb represents the status used when the custom resource is deleted and the finalizer operations are must to occur.
+	typeDegradedArklb = "Degraded"
 )
 
-// ArkReconciler reconciles a Ark object
-type ArkReconciler struct {
+// ArklbReconciler reconciles a Arklb object
+type ArklbReconciler struct {
 	client.Client
 	Scheme   *runtime.Scheme
 	Recorder record.EventRecorder
@@ -60,9 +60,9 @@ type ArkReconciler struct {
 // when the command <make manifests> is executed.
 // To know more about markers see: https://book.kubebuilder.io/reference/markers.html
 
-//+kubebuilder:rbac:groups=cache.example.com,resources=arks,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=cache.example.com,resources=arks/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=cache.example.com,resources=arks/finalizers,verbs=update
+//+kubebuilder:rbac:groups=dev.ark7.com,resources=arklbs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=dev.ark7.com,resources=arklbs/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=dev.ark7.com,resources=arklbs/finalizers,verbs=update
 //+kubebuilder:rbac:groups=core,resources=events,verbs=create;patch
 //+kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 //+kubebuilder:rbac:groups=core,resources=pods,verbs=get;list;watch
@@ -79,41 +79,41 @@ type ArkReconciler struct {
 // - About Operator Pattern: https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
 // - About Controllers: https://kubernetes.io/docs/concepts/architecture/controller/
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.1/pkg/reconcile
-func (r *ArkReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ArklbReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := log.FromContext(ctx)
 
-	// Fetch the Ark instance
-	// The purpose is check if the Custom Resource for the Kind Ark
+	// Fetch the Arklb instance
+	// The purpose is check if the Custom Resource for the Kind Arklb
 	// is applied on the cluster if not we return nil to stop the reconciliation
-	ark := &cachev1alpha1.Ark{}
-	err := r.Get(ctx, req.NamespacedName, ark)
+	arklb := &devv1alpha1.Arklb{}
+	err := r.Get(ctx, req.NamespacedName, arklb)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
 			// If the custom resource is not found then, it usually means that it was deleted or not created
 			// In this way, we will stop the reconciliation
-			log.Info("ark resource not found. Ignoring since object must be deleted")
+			log.Info("arklb resource not found. Ignoring since object must be deleted")
 			return ctrl.Result{}, nil
 		}
 		// Error reading the object - requeue the request.
-		log.Error(err, "Failed to get ark")
+		log.Error(err, "Failed to get arklb")
 		return ctrl.Result{}, err
 	}
 
 	// Let's just set the status as Unknown when no status are available
-	if ark.Status.Conditions == nil || len(ark.Status.Conditions) == 0 {
-		meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeAvailableArk, Status: metav1.ConditionUnknown, Reason: "Reconciling", Message: "Starting reconciliation"})
-		if err = r.Status().Update(ctx, ark); err != nil {
-			log.Error(err, "Failed to update Ark status")
+	if arklb.Status.Conditions == nil || len(arklb.Status.Conditions) == 0 {
+		meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeAvailableArklb, Status: metav1.ConditionUnknown, Reason: "Reconciling", Message: "Starting reconciliation"})
+		if err = r.Status().Update(ctx, arklb); err != nil {
+			log.Error(err, "Failed to update Arklb status")
 			return ctrl.Result{}, err
 		}
 
-		// Let's re-fetch the ark Custom Resource after update the status
+		// Let's re-fetch the arklb Custom Resource after update the status
 		// so that we have the latest state of the resource on the cluster and we will avoid
 		// raise the issue "the object has been modified, please apply
 		// your changes to the latest version and try again" which would re-trigger the reconciliation
 		// if we try to update it again in the following operations
-		if err := r.Get(ctx, req.NamespacedName, ark); err != nil {
-			log.Error(err, "Failed to re-fetch ark")
+		if err := r.Get(ctx, req.NamespacedName, arklb); err != nil {
+			log.Error(err, "Failed to re-fetch arklb")
 			return ctrl.Result{}, err
 		}
 	}
@@ -121,70 +121,70 @@ func (r *ArkReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	// Let's add a finalizer. Then, we can define some operations which should
 	// occurs before the custom resource to be deleted.
 	// More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers
-	if !controllerutil.ContainsFinalizer(ark, arkFinalizer) {
-		log.Info("Adding Finalizer for Ark")
-		if ok := controllerutil.AddFinalizer(ark, arkFinalizer); !ok {
+	if !controllerutil.ContainsFinalizer(arklb, arklbFinalizer) {
+		log.Info("Adding Finalizer for Arklb")
+		if ok := controllerutil.AddFinalizer(arklb, arklbFinalizer); !ok {
 			log.Error(err, "Failed to add finalizer into the custom resource")
 			return ctrl.Result{Requeue: true}, nil
 		}
 
-		if err = r.Update(ctx, ark); err != nil {
+		if err = r.Update(ctx, arklb); err != nil {
 			log.Error(err, "Failed to update custom resource to add finalizer")
 			return ctrl.Result{}, err
 		}
 	}
 
-	// Check if the Ark instance is marked to be deleted, which is
+	// Check if the Arklb instance is marked to be deleted, which is
 	// indicated by the deletion timestamp being set.
-	isArkMarkedToBeDeleted := ark.GetDeletionTimestamp() != nil
-	if isArkMarkedToBeDeleted {
-		if controllerutil.ContainsFinalizer(ark, arkFinalizer) {
-			log.Info("Performing Finalizer Operations for Ark before delete CR")
+	isArklbMarkedToBeDeleted := arklb.GetDeletionTimestamp() != nil
+	if isArklbMarkedToBeDeleted {
+		if controllerutil.ContainsFinalizer(arklb, arklbFinalizer) {
+			log.Info("Performing Finalizer Operations for Arklb before delete CR")
 
 			// Let's add here an status "Downgrade" to define that this resource begin its process to be terminated.
-			meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeDegradedArk,
+			meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeDegradedArklb,
 				Status: metav1.ConditionUnknown, Reason: "Finalizing",
-				Message: fmt.Sprintf("Performing finalizer operations for the custom resource: %s ", ark.Name)})
+				Message: fmt.Sprintf("Performing finalizer operations for the custom resource: %s ", arklb.Name)})
 
-			if err := r.Status().Update(ctx, ark); err != nil {
-				log.Error(err, "Failed to update Ark status")
+			if err := r.Status().Update(ctx, arklb); err != nil {
+				log.Error(err, "Failed to update Arklb status")
 				return ctrl.Result{}, err
 			}
 
 			// Perform all operations required before remove the finalizer and allow
 			// the Kubernetes API to remove the custom resource.
-			r.doFinalizerOperationsForArk(ark)
+			r.doFinalizerOperationsForArklb(arklb)
 
-			// TODO(user): If you add operations to the doFinalizerOperationsForArk method
+			// TODO(user): If you add operations to the doFinalizerOperationsForArklb method
 			// then you need to ensure that all worked fine before deleting and updating the Downgrade status
 			// otherwise, you should requeue here.
 
-			// Re-fetch the ark Custom Resource before update the status
+			// Re-fetch the arklb Custom Resource before update the status
 			// so that we have the latest state of the resource on the cluster and we will avoid
 			// raise the issue "the object has been modified, please apply
 			// your changes to the latest version and try again" which would re-trigger the reconciliation
-			if err := r.Get(ctx, req.NamespacedName, ark); err != nil {
-				log.Error(err, "Failed to re-fetch ark")
+			if err := r.Get(ctx, req.NamespacedName, arklb); err != nil {
+				log.Error(err, "Failed to re-fetch arklb")
 				return ctrl.Result{}, err
 			}
 
-			meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeDegradedArk,
+			meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeDegradedArklb,
 				Status: metav1.ConditionTrue, Reason: "Finalizing",
-				Message: fmt.Sprintf("Finalizer operations for custom resource %s name were successfully accomplished", ark.Name)})
+				Message: fmt.Sprintf("Finalizer operations for custom resource %s name were successfully accomplished", arklb.Name)})
 
-			if err := r.Status().Update(ctx, ark); err != nil {
-				log.Error(err, "Failed to update Ark status")
+			if err := r.Status().Update(ctx, arklb); err != nil {
+				log.Error(err, "Failed to update Arklb status")
 				return ctrl.Result{}, err
 			}
 
-			log.Info("Removing Finalizer for Ark after successfully perform the operations")
-			if ok := controllerutil.RemoveFinalizer(ark, arkFinalizer); !ok {
-				log.Error(err, "Failed to remove finalizer for Ark")
+			log.Info("Removing Finalizer for Arklb after successfully perform the operations")
+			if ok := controllerutil.RemoveFinalizer(arklb, arklbFinalizer); !ok {
+				log.Error(err, "Failed to remove finalizer for Arklb")
 				return ctrl.Result{Requeue: true}, nil
 			}
 
-			if err := r.Update(ctx, ark); err != nil {
-				log.Error(err, "Failed to remove finalizer for Ark")
+			if err := r.Update(ctx, arklb); err != nil {
+				log.Error(err, "Failed to remove finalizer for Arklb")
 				return ctrl.Result{}, err
 			}
 		}
@@ -193,20 +193,20 @@ func (r *ArkReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 
 	// Check if the deployment already exists, if not create a new one
 	found := &appsv1.Deployment{}
-	err = r.Get(ctx, types.NamespacedName{Name: ark.Name, Namespace: ark.Namespace}, found)
+	err = r.Get(ctx, types.NamespacedName{Name: arklb.Name, Namespace: arklb.Namespace}, found)
 	if err != nil && apierrors.IsNotFound(err) {
 		// Define a new deployment
-		dep, err := r.deploymentForArk(ark)
+		dep, err := r.deploymentForArklb(arklb)
 		if err != nil {
-			log.Error(err, "Failed to define new Deployment resource for Ark")
+			log.Error(err, "Failed to define new Deployment resource for Arklb")
 
 			// The following implementation will update the status
-			meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeAvailableArk,
+			meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeAvailableArklb,
 				Status: metav1.ConditionFalse, Reason: "Reconciling",
-				Message: fmt.Sprintf("Failed to create Deployment for the custom resource (%s): (%s)", ark.Name, err)})
+				Message: fmt.Sprintf("Failed to create Deployment for the custom resource (%s): (%s)", arklb.Name, err)})
 
-			if err := r.Status().Update(ctx, ark); err != nil {
-				log.Error(err, "Failed to update Ark status")
+			if err := r.Status().Update(ctx, arklb); err != nil {
+				log.Error(err, "Failed to update Arklb status")
 				return ctrl.Result{}, err
 			}
 
@@ -231,33 +231,33 @@ func (r *ArkReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 		return ctrl.Result{}, err
 	}
 
-	// The CRD API is defining that the Ark type, have a ArkSpec.Size field
+	// The CRD API is defining that the Arklb type, have a ArklbSpec.Size field
 	// to set the quantity of Deployment instances is the desired state on the cluster.
 	// Therefore, the following code will ensure the Deployment size is the same as defined
 	// via the Size spec of the Custom Resource which we are reconciling.
-	size := ark.Spec.Size
+	size := arklb.Spec.Size
 	if *found.Spec.Replicas != size {
 		found.Spec.Replicas = &size
 		if err = r.Update(ctx, found); err != nil {
 			log.Error(err, "Failed to update Deployment",
 				"Deployment.Namespace", found.Namespace, "Deployment.Name", found.Name)
 
-			// Re-fetch the ark Custom Resource before update the status
+			// Re-fetch the arklb Custom Resource before update the status
 			// so that we have the latest state of the resource on the cluster and we will avoid
 			// raise the issue "the object has been modified, please apply
 			// your changes to the latest version and try again" which would re-trigger the reconciliation
-			if err := r.Get(ctx, req.NamespacedName, ark); err != nil {
-				log.Error(err, "Failed to re-fetch ark")
+			if err := r.Get(ctx, req.NamespacedName, arklb); err != nil {
+				log.Error(err, "Failed to re-fetch arklb")
 				return ctrl.Result{}, err
 			}
 
 			// The following implementation will update the status
-			meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeAvailableArk,
+			meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeAvailableArklb,
 				Status: metav1.ConditionFalse, Reason: "Resizing",
-				Message: fmt.Sprintf("Failed to update the size for the custom resource (%s): (%s)", ark.Name, err)})
+				Message: fmt.Sprintf("Failed to update the size for the custom resource (%s): (%s)", arklb.Name, err)})
 
-			if err := r.Status().Update(ctx, ark); err != nil {
-				log.Error(err, "Failed to update Ark status")
+			if err := r.Status().Update(ctx, arklb); err != nil {
+				log.Error(err, "Failed to update Arklb status")
 				return ctrl.Result{}, err
 			}
 
@@ -271,20 +271,20 @@ func (r *ArkReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.R
 	}
 
 	// The following implementation will update the status
-	meta.SetStatusCondition(&ark.Status.Conditions, metav1.Condition{Type: typeAvailableArk,
+	meta.SetStatusCondition(&arklb.Status.Conditions, metav1.Condition{Type: typeAvailableArklb,
 		Status: metav1.ConditionTrue, Reason: "Reconciling",
-		Message: fmt.Sprintf("Deployment for custom resource (%s) with %d replicas created successfully", ark.Name, size)})
+		Message: fmt.Sprintf("Deployment for custom resource (%s) with %d replicas created successfully", arklb.Name, size)})
 
-	if err := r.Status().Update(ctx, ark); err != nil {
-		log.Error(err, "Failed to update Ark status")
+	if err := r.Status().Update(ctx, arklb); err != nil {
+		log.Error(err, "Failed to update Arklb status")
 		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{}, nil
 }
 
-// finalizeArk will perform the required operations before delete the CR.
-func (r *ArkReconciler) doFinalizerOperationsForArk(cr *cachev1alpha1.Ark) {
+// finalizeArklb will perform the required operations before delete the CR.
+func (r *ArklbReconciler) doFinalizerOperationsForArklb(cr *devv1alpha1.Arklb) {
 	// TODO(user): Add the cleanup steps that the operator
 	// needs to do before the CR can be deleted. Examples
 	// of finalizers include performing backups and deleting
@@ -303,22 +303,22 @@ func (r *ArkReconciler) doFinalizerOperationsForArk(cr *cachev1alpha1.Ark) {
 			cr.Namespace))
 }
 
-// deploymentForArk returns a Ark Deployment object
-func (r *ArkReconciler) deploymentForArk(
-	ark *cachev1alpha1.Ark) (*appsv1.Deployment, error) {
-	ls := labelsForArk(ark.Name)
-	replicas := ark.Spec.Size
+// deploymentForArklb returns a Arklb Deployment object
+func (r *ArklbReconciler) deploymentForArklb(
+	arklb *devv1alpha1.Arklb) (*appsv1.Deployment, error) {
+	ls := labelsForArklb(arklb.Name)
+	replicas := arklb.Spec.Size
 
 	// Get the Operand image
-	image, err := imageForArk()
+	image, err := imageForArklb()
 	if err != nil {
 		return nil, err
 	}
 
 	dep := &appsv1.Deployment{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      ark.Name,
-			Namespace: ark.Namespace,
+			Name:      arklb.Name,
+			Namespace: arklb.Namespace,
 		},
 		Spec: appsv1.DeploymentSpec{
 			Replicas: &replicas,
@@ -369,23 +369,12 @@ func (r *ArkReconciler) deploymentForArk(
 					},
 					Containers: []corev1.Container{{
 						Image:           image,
-						Name:            "ark",
+						Name:            "arklb",
 						ImagePullPolicy: corev1.PullIfNotPresent,
 						// Ensure restrictive context for the container
 						// More info: https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted
 						SecurityContext: &corev1.SecurityContext{
-							// WARNING: Ensure that the image used defines an UserID in the Dockerfile
-							// otherwise the Pod will not run and will fail with "container has runAsNonRoot and image has non-numeric user"".
-							// If you want your workloads admitted in namespaces enforced with the restricted mode in OpenShift/OKD vendors
-							// then, you MUST ensure that the Dockerfile defines a User ID OR you MUST leave the "RunAsNonRoot" and
-							// "RunAsUser" fields empty.
-							RunAsNonRoot: &[]bool{true}[0],
-							// The ark image does not use a non-zero numeric user as the default user.
-							// Due to RunAsNonRoot field being set to true, we need to force the user in the
-							// container to a non-zero numeric user. We do this using the RunAsUser field.
-							// However, if you are looking to provide solution for K8s vendors like OpenShift
-							// be aware that you cannot run under its restricted-v2 SCC if you set this value.
-							RunAsUser:                &[]int64{1001}[0],
+							RunAsNonRoot:             &[]bool{true}[0],
 							AllowPrivilegeEscalation: &[]bool{false}[0],
 							Capabilities: &corev1.Capabilities{
 								Drop: []corev1.Capability{
@@ -393,11 +382,6 @@ func (r *ArkReconciler) deploymentForArk(
 								},
 							},
 						},
-						Ports: []corev1.ContainerPort{{
-							ContainerPort: ark.Spec.ContainerPort,
-							Name:          "ark",
-						}},
-						Command: []string{"ark", "-m=64", "-o", "modern", "-v"},
 					}},
 				},
 			},
@@ -406,32 +390,32 @@ func (r *ArkReconciler) deploymentForArk(
 
 	// Set the ownerRef for the Deployment
 	// More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/owners-dependents/
-	if err := ctrl.SetControllerReference(ark, dep, r.Scheme); err != nil {
+	if err := ctrl.SetControllerReference(arklb, dep, r.Scheme); err != nil {
 		return nil, err
 	}
 	return dep, nil
 }
 
-// labelsForArk returns the labels for selecting the resources
+// labelsForArklb returns the labels for selecting the resources
 // More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/
-func labelsForArk(name string) map[string]string {
+func labelsForArklb(name string) map[string]string {
 	var imageTag string
-	image, err := imageForArk()
+	image, err := imageForArklb()
 	if err == nil {
 		imageTag = strings.Split(image, ":")[1]
 	}
-	return map[string]string{"app.kubernetes.io/name": "Ark",
+	return map[string]string{"app.kubernetes.io/name": "Arklb",
 		"app.kubernetes.io/instance":   name,
 		"app.kubernetes.io/version":    imageTag,
-		"app.kubernetes.io/part-of":    "ark-operator",
+		"app.kubernetes.io/part-of":    "operator-ark",
 		"app.kubernetes.io/created-by": "controller-manager",
 	}
 }
 
-// imageForArk gets the Operand image which is managed by this controller
-// from the ARK_IMAGE environment variable defined in the config/manager/manager.yaml
-func imageForArk() (string, error) {
-	var imageEnvVar = "ARK_IMAGE"
+// imageForArklb gets the Operand image which is managed by this controller
+// from the ARKLB_IMAGE environment variable defined in the config/manager/manager.yaml
+func imageForArklb() (string, error) {
+	var imageEnvVar = "ARKLB_IMAGE"
 	image, found := os.LookupEnv(imageEnvVar)
 	if !found {
 		return "", fmt.Errorf("Unable to find %s environment variable with the image", imageEnvVar)
@@ -442,9 +426,9 @@ func imageForArk() (string, error) {
 // SetupWithManager sets up the controller with the Manager.
 // Note that the Deployment will be also watched in order to ensure its
 // desirable state on the cluster
-func (r *ArkReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *ArklbReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&cachev1alpha1.Ark{}).
+		For(&devv1alpha1.Arklb{}).
 		Owns(&appsv1.Deployment{}).
 		Complete(r)
 }
