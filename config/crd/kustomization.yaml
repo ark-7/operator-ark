@@ -2,5 +2,5 @@
 # since it depends on service name and namespace that are out of this kustomize package.
 # It should be run by config/default
 resources:
-- bases/charts.hub.docker.com_arklbs.yaml
+- bases/dev.ark7.github.io_arks.yaml
 #+kubebuilder:scaffold:crdkustomizeresource

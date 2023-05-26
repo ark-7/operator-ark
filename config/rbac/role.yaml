@@ -29,14 +29,14 @@ rules:
   - create
 
 ##
-## Rules for charts.hub.docker.com/v1alpha1, Kind: Arklb
+## Rules for dev.ark7.github.io/v1alpha1, Kind: Ark
 ##
 - apiGroups:
-  - charts.hub.docker.com
+  - dev.ark7.github.io
   resources:
-  - arklbs
-  - arklbs/status
-  - arklbs/finalizers
+  - arks
+  - arks/status
+  - arks/finalizers
   verbs:
   - create
   - delete
@@ -45,39 +45,18 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
+- verbs:
+  - "*"
+  apiGroups:
   - ""
   resources:
-  - pods
-  - services
-  - services/finalizers
-  - endpoints
-  - persistentvolumeclaims
-  - events
-  - configmaps
-  - secrets
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - apps
+  - "serviceaccounts"
+  - "services"
+- verbs:
+  - "*"
+  apiGroups:
+  - "apps"
   resources:
-  - deployments
-  - daemonsets
-  - replicasets
-  - statefulsets
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
+  - "deployments"
 
 #+kubebuilder:scaffold:rules

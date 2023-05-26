@@ -1,10 +1,11 @@
-apiVersion: charts.hub.docker.com/v1alpha1
-kind: Arklb
+apiVersion: dev.ark7.github.io/v1alpha1
+kind: Ark
 metadata:
-  name: arklb-sample
+  name: ark-sample
+  namespace: default
 spec:
   # Default values copied from <project_dir>/helm-charts/arklb/values.yaml
-  replicaCount: 2
+  replicaCount: 1
   affinity: {}
   autoscaling:
     enabled: false
@@ -13,7 +14,6 @@ spec:
   image:
     pullPolicy: IfNotPresent
     repository: aerox86/arklb
-    tag: latest
     tty: true
   imagePullSecrets: []
   ingress:
@@ -34,10 +34,11 @@ spec:
   securityContext:
     privileged: true
   service:
-    port: 8081
-    type: NodePort
+    port: 8080
+    type: ClusterIP
   serviceAccount:
     annotations: {}
-    create: true
-    name: arklb
+    create: false
+    name: ark
   tolerations: []
+  

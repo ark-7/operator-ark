@@ -1,20 +1,20 @@
-# permissions for end users to edit arklbs.
+# permissions for end users to edit arks.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
     app.kubernetes.io/name: clusterrole
-    app.kubernetes.io/instance: arklb-editor-role
+    app.kubernetes.io/instance: ark-editor-role
     app.kubernetes.io/component: rbac
     app.kubernetes.io/created-by: operator-ark
     app.kubernetes.io/part-of: operator-ark
     app.kubernetes.io/managed-by: kustomize
-  name: arklb-editor-role
+  name: ark-editor-role
 rules:
 - apiGroups:
-  - charts.hub.docker.com
+  - dev.ark7.github.io
   resources:
-  - arklbs
+  - arks
   verbs:
   - create
   - delete
@@ -24,8 +24,8 @@ rules:
   - update
   - watch
 - apiGroups:
-  - charts.hub.docker.com
+  - dev.ark7.github.io
   resources:
-  - arklbs/status
+  - arks/status
   verbs:
   - get

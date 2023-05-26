@@ -1,4 +1,4 @@
 ## Append samples of your project ##
 resources:
-- charts_v1alpha1_arklb.yaml
+- dev_v1alpha1_ark.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
